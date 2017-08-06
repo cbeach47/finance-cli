@@ -1,4 +1,4 @@
-package org.lodge.finance.cli.utils;
+package org.fishy.finance.cli.utils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package org.lodge.finance.cli.utils;
+package org.fishy.finance.cli.utils;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -10,11 +10,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lodge.finance.cli.dao.Account;
-import org.lodge.finance.cli.dao.Category;
-import org.lodge.finance.cli.dao.Detail;
-import org.lodge.finance.cli.dao.FinancialGroup;
-import org.lodge.finance.cli.dao.Transaction;
+import org.fishy.finance.cli.dao.Account;
+import org.fishy.finance.cli.dao.Category;
+import org.fishy.finance.cli.dao.Detail;
+import org.fishy.finance.cli.dao.FinancialGroup;
+import org.fishy.finance.cli.dao.Transaction;
 
 public class DbUtils {
 	private static Connection conn = null;
