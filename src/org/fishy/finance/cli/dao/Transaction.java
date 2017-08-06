@@ -1,10 +1,10 @@
-package org.lodge.finance.cli.dao;
+package org.fishy.finance.cli.dao;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.lodge.finance.cli.FinanceDriver;
-import org.lodge.finance.cli.dao.Transaction.TransType;
+import org.fishy.finance.cli.FinanceDriver;
+import org.fishy.finance.cli.dao.Transaction.TransType;
 
 public class Transaction {
 	public enum ReceiptType {

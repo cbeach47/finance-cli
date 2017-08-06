@@ -1,4 +1,4 @@
-package org.lodge.finance.cli.dao;
+package org.fishy.finance.cli.dao;
 
 public class FinancialGroup {
 	private String uuid;

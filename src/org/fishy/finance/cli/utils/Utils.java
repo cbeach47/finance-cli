@@ -1,4 +1,4 @@
-package org.lodge.finance.cli.utils;
+package org.fishy.finance.cli.utils;
 
 public class Utils {
 	public static String pad(String org, char padding, int desiredLength) {

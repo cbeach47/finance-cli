@@ -1,10 +1,10 @@
-package org.lodge.finance.cli.dao;
+package org.fishy.finance.cli.dao;
 
-public class Category {
+public class Account {
 	private String uuid;
 	private String name;
 	
-	public Category(String uuid, String name) {
+	public Account(String uuid, String name) {
 		this.uuid = uuid;
 		this.name = name;
 	}

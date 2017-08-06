@@ -1,4 +1,4 @@
-package org.lodge.finance.cli;
+package org.fishy.finance.cli;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,13 +10,13 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.UUID;
 
-import org.lodge.finance.cli.dao.Account;
-import org.lodge.finance.cli.dao.Category;
-import org.lodge.finance.cli.dao.Detail;
-import org.lodge.finance.cli.dao.FinancialGroup;
-import org.lodge.finance.cli.dao.Transaction;
-import org.lodge.finance.cli.utils.Configs;
-import org.lodge.finance.cli.utils.DbUtils;
+import org.fishy.finance.cli.dao.Account;
+import org.fishy.finance.cli.dao.Category;
+import org.fishy.finance.cli.dao.Detail;
+import org.fishy.finance.cli.dao.FinancialGroup;
+import org.fishy.finance.cli.dao.Transaction;
+import org.fishy.finance.cli.utils.Configs;
+import org.fishy.finance.cli.utils.DbUtils;
 
 public class FinanceDriver {
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
