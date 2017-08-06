@@ -46,6 +46,7 @@ public class FinanceDriver {
 				outfln("6) Set Current Transaction ID");
 				outfln("7) Set Current Detail Order");
 				outfln("8) Check Detail Amounts Against Current Transaction");
+				outfln("9) Reporting");
 				option = promptForInt();
 				switch(option) {
 				case 0: {
@@ -128,6 +129,10 @@ public class FinanceDriver {
 							outfln("There is still $%s left in the transaction to detail.", total.doubleValue());
 						}
 					//}
+					break;
+				}
+				case 9: {
+					reportMenu();
 					break;
 				}
 				default: {
@@ -304,4 +309,7 @@ public class FinanceDriver {
 		System.out.println(String.format(s, args));
 	}
 	
+	private static void reportMenu() {
+		System.out.println("Awesome reports go here");
+	}
 }
