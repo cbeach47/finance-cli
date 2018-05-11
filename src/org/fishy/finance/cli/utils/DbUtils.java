@@ -14,6 +14,7 @@ import org.fishy.finance.cli.dao.Account;
 import org.fishy.finance.cli.dao.Category;
 import org.fishy.finance.cli.dao.Detail;
 import org.fishy.finance.cli.dao.FinancialGroup;
+import org.fishy.finance.cli.dao.GeneralDao;
 import org.fishy.finance.cli.dao.Transaction;
 
 public class DbUtils {
@@ -28,7 +29,66 @@ public class DbUtils {
 		conn = DriverManager.getConnection(url);
 		System.out.printf("Connected to the [%s] database.\n", c.get(Configs.DB_NAME));
 	}
+	
+	public static boolean save(GeneralDao dao) throws Exception {
+		if(dao instanceof Account) return save((Account) dao);
+		else if(dao instanceof FinancialGroup) return save((FinancialGroup) dao);
+		else if(dao instanceof Category) return save((Category) dao);
+		else throw new Exception("Unknown type of DAO to save: " + dao.getClass().getName());
+	}
 
+	public static boolean update(GeneralDao dao) throws Exception {
+		if(dao instanceof Account) return update((Account) dao);
+		else if(dao instanceof FinancialGroup) return update((FinancialGroup) dao);
+		else if(dao instanceof Category) return update((Category) dao);
+		else throw new Exception("Unknown type of DAO to save: " + dao.getClass().getName());
+	}
+
+	public static boolean update(Account a) {
+		String sql = "update ACCOUNT set NAME = ? where UUID = ?";
+		 
+		try (PreparedStatement st = conn.prepareStatement(sql)){
+			st.setString(1, a.getName());
+			st.setString(2, a.getUuid());
+			int ret = st.executeUpdate();
+			return ret == 1;
+		} catch (SQLException e) {
+			System.err.println("Error updating the account ["+a+"].  MSG="+e.getMessage());
+			//e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean update(FinancialGroup fg) {
+		String sql = "update FINANCIAL_GROUP set NAME = ? where UUID = ?";
+		 
+		try (PreparedStatement st = conn.prepareStatement(sql)){
+			st.setString(1, fg.getName());
+			st.setString(2, fg.getUuid());
+			int ret = st.executeUpdate();
+			return ret == 1;
+		} catch (SQLException e) {
+			System.err.println("Error updating the financial group ["+fg+"].  MSG="+e.getMessage());
+			//e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean update(Category c) {
+		String sql = "update CATEGORY set NAME = ? where UUID = ?";
+		 
+		try (PreparedStatement st = conn.prepareStatement(sql)){
+			st.setString(1, c.getName());
+			st.setString(2, c.getUuid());
+			int ret = st.executeUpdate();
+			return ret == 1;
+		} catch (SQLException e) {
+			System.err.println("Error updating the category ["+c+"].  MSG="+e.getMessage());
+			//e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public static boolean save(Account a) {
 		String sql = "insert into ACCOUNT (UUID, NAME) values (?,?)";
 		 
@@ -39,7 +99,7 @@ public class DbUtils {
 			return ret == 1;
 		} catch (SQLException e) {
 			System.err.println("Error saving the account ["+a+"].  MSG="+e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return false;
 	}
@@ -55,7 +115,7 @@ public class DbUtils {
 			return ret == 1;
 		} catch (SQLException e) {
 			System.err.println("Error saving the financial group ["+g+"].  MSG="+e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return false;
 	}
@@ -71,7 +131,7 @@ public class DbUtils {
 			return ret == 1;
 		} catch (SQLException e) {
 			System.err.println("Error saving the category ["+c+"].  MSG="+e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return false;
 	}
@@ -93,7 +153,7 @@ public class DbUtils {
 			return ret == 1;
 		} catch (SQLException e) {
 			System.err.println("Error saving the transaction ["+t+"].  MSG="+e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return false;
 	}
@@ -115,13 +175,57 @@ public class DbUtils {
 			return ret == 1;
 		} catch (SQLException e) {
 			System.err.println("Error saving the detail ["+d+"].  MSG="+e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return false;
 	}
 	
-	public static List<Account> getAccounts() {
-		List<Account> toRet = new ArrayList<Account>();
+	public static boolean update(Transaction t) {
+		String sql = "update TRANSACTION set date = ?, amount = ?, type = ?, account_id = ?, location = ?, receipt = ?, comments = ? "
+				+ "where id = ?";
+		 
+		try (PreparedStatement st = conn.prepareStatement(sql)){
+			st.setDate(1, new Date(t.getDate().getTime()));
+			st.setDouble(2, t.getAmount().doubleValue());
+			st.setString(3, t.getType());
+			st.setString(4, t.getAccount().getUuid());
+			st.setString(5, t.getLocation());
+			st.setString(6, t.getReceiptType());
+			st.setString(7, t.getComments());
+			st.setString(8, t.getId());
+			int ret = st.executeUpdate();
+			return ret == 1;
+		} catch (SQLException e) {
+			System.err.println("Error updating the transaction ["+t+"].  MSG="+e.getMessage());
+			//e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean update(Detail d) {
+		String sql = "update DETAIL set month_intended = ?, amount = ?, financial_group_id = ?, category_id = ?, comments = ? "
+				+ "where trans_id = ? and detail_order = ?";
+		 
+		try (PreparedStatement st = conn.prepareStatement(sql)){
+			st.setString(1, d.getMonthIntended());
+			st.setDouble(2, d.getAmount().doubleValue());
+			st.setString(3, d.getGroup().getUuid());
+			st.setString(4, d.getCategory().getUuid());
+			st.setString(5, d.getComments());
+			st.setString(6, d.getTransactionId());
+			st.setInt(7, d.getOrder());
+			int ret = st.executeUpdate();
+			return ret == 1;
+		} catch (SQLException e) {
+			System.err.println("Error updating the detail ["+d+"].  MSG="+e.getMessage());
+			//e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	public static List<GeneralDao> getAccounts() {
+		List<GeneralDao> toRet = new ArrayList<GeneralDao>();
 		String sql = "select uuid, name from ACCOUNT order by name";
 		 
 		try (PreparedStatement st = conn.prepareStatement(sql)){
@@ -138,8 +242,8 @@ public class DbUtils {
 		return null;
 	}
 	
-	public static List<FinancialGroup> getGroups() {
-		List<FinancialGroup> toRet = new ArrayList<FinancialGroup>();
+	public static List<GeneralDao> getGroups() {
+		List<GeneralDao> toRet = new ArrayList<GeneralDao>();
 		String sql = "select uuid, name from financial_group order by name";
 		 
 		try (PreparedStatement st = conn.prepareStatement(sql)){
@@ -156,8 +260,8 @@ public class DbUtils {
 		return null;
 	}
 	
-	public static List<Category> getCategories() {
-		List<Category> toRet = new ArrayList<Category>();
+	public static List<GeneralDao> getCategories() {
+		List<GeneralDao> toRet = new ArrayList<GeneralDao>();
 		String sql = "select uuid, name from Category order by name";
 		 
 		try (PreparedStatement st = conn.prepareStatement(sql)){
@@ -173,9 +277,44 @@ public class DbUtils {
 		}
 		return null;
 	}
+	
+	public static List<Transaction> getTransactionsByYear(String year) {
+		String sql = "select t.date, t.amount, t.type, a.uuid, a.name, t.location, t.receipt, t.comments, t.id "
+				+ "from transaction t "
+				+ "left outer join account a on a.uuid = t.account_id "
+				+ "where t.id like ?";
+		 
+		try (PreparedStatement st = conn.prepareStatement(sql)){
+			st.setString(1, year+"%");
+			List<Transaction> tList = new ArrayList<>();
+			ResultSet rs = st.executeQuery();
+			while(rs.next()) {
+				tList.add(inflateTransaction(rs));
+			}
+			rs.close();
+			return tList;
+		} catch (SQLException e) {
+			System.err.println("Error retrieving transaction by year=["+year+"].  MSG="+e.getMessage());
+			e.printStackTrace();
+		}
+		return null;	
+	}
+	
+	private static Transaction inflateTransaction(ResultSet rs) throws SQLException {
+		Transaction t = new Transaction();
+		t.setDate(rs.getDate(1));
+		t.setAmount(BigDecimal.valueOf(rs.getDouble(2)));
+		t.setType(rs.getString(3));
+		t.setAccount(new Account(rs.getString(4), rs.getString(5)));
+		t.setLocation(rs.getString(6));
+		t.setReceiptType(rs.getString(7));
+		t.setComments(rs.getString(8));
+		t.setId(rs.getString(9));
+		return t;
+	}
 
 	public static Transaction getTransaction(String currentTransId) {
-		String sql = "select t.date, t.amount, t.type, a.uuid, a.name, t.location, t.receipt, t.comments "
+		String sql = "select t.date, t.amount, t.type, a.uuid, a.name, t.location, t.receipt, t.comments, t.id "
 				+ "from transaction t "
 				+ "left outer join account a on a.uuid = t.account_id "
 				+ "where t.id = ?";
@@ -186,15 +325,7 @@ public class DbUtils {
 			
 			ResultSet rs = st.executeQuery();
 			if(rs.next()) {
-				t = new Transaction();
-				t.setId(currentTransId);
-				t.setDate(rs.getDate(1));
-				t.setAmount(BigDecimal.valueOf(rs.getDouble(2)));
-				t.setType(rs.getString(3));
-				t.setAccount(new Account(rs.getString(4), rs.getString(5)));
-				t.setLocation(rs.getString(6));
-				t.setReceiptType(rs.getString(7));
-				t.setComments(rs.getString(8));
+				t = inflateTransaction(rs);
 			}
 			rs.close();
 			return t;
@@ -232,6 +363,38 @@ public class DbUtils {
 			return toRet;
 		} catch (SQLException e) {
 			System.err.println("Error retrieving details associated to transaction ["+currentTransId+"].  MSG="+e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Detail getDetailNoTrans(String currentTransId, int order) {
+		Detail d = null;
+		String sql = "select d.detail_order, d.month_intended, d.amount, "
+				+ "fg.uuid, fg.name, cat.uuid, cat.name, d.comments "
+				+ "from detail d "
+				+ "left outer join financial_group fg on fg.uuid = d.financial_group_id "
+				+ "left outer join category cat on cat.uuid = d.category_id "
+				+ "where d.trans_id = ? and d.detail_order = ?";
+		 
+		try (PreparedStatement st = conn.prepareStatement(sql)){
+			st.setString(1, currentTransId);
+			st.setInt(2, order);
+			ResultSet rs = st.executeQuery();
+			if(rs.next()) {
+				d = new Detail();
+				d.setTransactionId(currentTransId);
+				d.setOrder(rs.getInt(1));
+				d.setMonthIntended(rs.getString(2));
+				d.setAmount(BigDecimal.valueOf(rs.getDouble(3)));
+				d.setGroup(new FinancialGroup(rs.getString(4), rs.getString(5)));
+				d.setCategory(new Category(rs.getString(6), rs.getString(7)));
+				d.setComments(rs.getString(8));
+			}
+			rs.close();
+			return d;
+		} catch (SQLException e) {
+			System.err.println("Error retrieving detail associated to transaction ["+currentTransId+"] at order ["+order+"].  MSG="+e.getMessage());
 			e.printStackTrace();
 		}
 		return null;

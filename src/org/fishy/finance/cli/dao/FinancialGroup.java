@@ -1,23 +1,12 @@
 package org.fishy.finance.cli.dao;
 
-public class FinancialGroup {
-	private String uuid;
-	private String name;
-	
+public class FinancialGroup extends GeneralDao {
 	public FinancialGroup(String uuid, String name) {
-		this.uuid = uuid;
-		this.name = name;
+		super(uuid, name);
 	}
 
-	public String getUuid() {
-		return uuid;
-	}
-
-	public String getName() {
-		return name;
-	}
-	
-	public String toString() {
+	@Override
+	public String getShortName() {
 		return name;
 	}
 }
