@@ -3,8 +3,7 @@ package org.fishy.finance.cli.dao;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.fishy.finance.cli.FinanceDriver;
-import org.fishy.finance.cli.dao.Transaction.TransType;
+import org.fishy.finance.cli.utils.Utils;
 
 public class Transaction {
 	public enum ReceiptType {
@@ -81,8 +80,17 @@ public class Transaction {
 		return String.format("Transaction:  id=[%s], date=[%s], "
 				+ "amount=[%s], account=[%s], "
 				+ "type=[%s], location=[%s], "
-				+ "receiptType=[%s], comments=[%s]", id, FinanceDriver.DATE_FORMAT.format(date), amount, account, type, location, type, location);
+				+ "receiptType=[%s], comments=[%s]", id, Utils.DATE_FORMAT.format(date), amount, account, type, location, type, receiptType, comments);
 	}
+	
+	public String toCsv() {
+		return String.format("Transaction,%s,%s,%s,%s,%s,%s,%s,%s]", id, Utils.DATE_FORMAT.format(date), amount, account, type, location, type, location, receiptType, comments);
+	}
+	
+	public static String getCsvHeader() {
+		return String.format("Entity,ID,Date,Amount,Account,Type,Location,Receipt Type,Comments");
+	}
+	
 	public TransType getTypeAsEnum() {
 		return type;
 	}
